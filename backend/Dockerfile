@@ -13,7 +13,7 @@ RUN go mod download
 
 COPY . .
 
-RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o /app/main ./cmd/main.go
+RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o /build/main ./cmd/api/main.go
 
 FROM alpine:3.16
 
@@ -22,7 +22,7 @@ RUN addgroup -g 1001 -S appgroup && \
 
 WORKDIR /app
 
-COPY --from=builder /app/main .
+COPY --from=builder /build/main .
 
 USER appuser
 
