@@ -1,4 +1,4 @@
-FROM golang:1.17.13-alpine3.16 AS builder
+FROM golang:1.22.7-alpine3.20 AS builder
 
 RUN apk update --no-cache && apk add --no-cache tzdata git curl
 
@@ -15,7 +15,7 @@ COPY . .
 
 RUN GOOS=linux CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-s -w" -o /build/main ./cmd/api/*.go
 
-FROM alpine:3.16
+FROM alpine:3.20
 
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup

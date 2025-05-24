@@ -62,7 +62,7 @@ jobs:
           severity: 'HIGH,CRITICAL'
 
   push_be_to_docker_hub:
-    name: Публикация образов в Docker Hub
+    name: Публикация backend-образа в Registry
     runs-on: ubuntu-latest
     needs: [build_and_scan_backend]
     steps:
@@ -86,7 +86,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/docker-project-be:latest
 
   push_fe_to_docker_hub:
-    name: Публикация образов в Docker Hub
+    name: Публикация frontend-образа в Registry
     runs-on: ubuntu-latest
     needs: [build_and_scan_frontend]
     steps:
