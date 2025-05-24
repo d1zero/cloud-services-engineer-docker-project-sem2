@@ -13,7 +13,7 @@ RUN go mod download
 
 COPY . .
 
-RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o /build/main ./cmd/api/main.go
+RUN GOOS=linux CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-s -w" -o /build/main ./cmd/api/*.go
 
 FROM alpine:3.16
 

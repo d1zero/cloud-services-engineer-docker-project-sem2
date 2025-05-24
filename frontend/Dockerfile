@@ -25,7 +25,7 @@ RUN addgroup -g 1001 -S appgroup && adduser -u 1001 -S appuser -G appgroup
 COPY --chown=appuser:appgroup nginx.conf /etc/nginx/conf.d/default.conf 
 COPY --from=builder --chown=appuser:appgroup /app/dist /usr/share/nginx/html
 
-RUN chown -R appuser:appgroup /var/cache/nginx /var/log/nginx /etc/nginx/conf.d /var/run/nginx.pid
+RUN touch /var/run/nginx.pid && chown -R appuser:appgroup /var/cache/nginx /var/log/nginx /etc/nginx/conf.d /var/run/nginx.pid
 
 EXPOSE 80
 
