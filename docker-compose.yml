@@ -1,0 +1,63 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/docker-project-sem2-backend:latest
+    container_name: momo-store-be
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    networks:
+      - momo-net
+    environment:
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+    read_only: true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/docker-project-sem2-frontend:latest
+    container_name: momo-store-fe
+    restart: unless-stopped
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "80:80"
+    networks:
+      - momo-net
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.3'
+    read_only: true
+    volumes:
+      - nginx-cache:/var/cache/nginx:rw
+      - nginx-pid:/var/run:rw
+
+networks:
+  momo-net:
+    driver: bridge
+
+volumes:
+  nginx-cache:
+  nginx-pid:
